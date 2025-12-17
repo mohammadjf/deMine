@@ -96,7 +96,7 @@ const Cell: React.FC<CellProps> = React.memo(({ data, gameState, onClick, onCont
       onContextMenu={onContextMenu}
       disabled={isRevealed && gameState !== 'ready'}
       className={cn(
-        'flex items-center justify-center aspect-square h-full w-full rounded-sm transition-all duration-200',
+        'flex items-center justify-center aspect-square h-6 w-6 rounded-sm transition-all duration-200',
         isRevealed
           ? 'bg-muted/50 border-muted/60'
           : 'bg-primary/80 hover:bg-primary border-primary',
