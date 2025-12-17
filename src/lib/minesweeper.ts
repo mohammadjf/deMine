@@ -1,3 +1,4 @@
+
 export type CellData = {
   row: number;
   col: number;
@@ -109,6 +110,18 @@ export function revealAllMines(grid: CellData[][]): CellData[][] {
         for (const cell of row) {
             if (cell.isMine) {
                 cell.isRevealed = true;
+            }
+        }
+    }
+    return newGrid;
+}
+
+export function flagAllMines(grid: CellData[][]): CellData[][] {
+    const newGrid = JSON.parse(JSON.stringify(grid));
+    for (const row of newGrid) {
+        for (const cell of row) {
+            if (cell.isMine && !cell.isRevealed) {
+                cell.isFlagged = true;
             }
         }
     }

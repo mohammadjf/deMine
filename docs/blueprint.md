@@ -3,7 +3,7 @@
 ## Core Features:
 
 - Interactive Grid: Generate a grid of cells that can be revealed by the user. Grid sizes include beginner, intermediate and expert.
-- Mine Placement: Randomly place mines on the grid. THe number of mines should vary with the difficulty selected. Ensure no mine is placed on the first click.
+- Mine Placement: Randomly place mines on the grid. The number of mines should vary with the difficulty selected. Ensure no mine is placed on the first click.
 - Cell Revealing: Reveal cells upon user click. If a mine is revealed, the game ends. Display number of adjacent mines if no mine is revealed.
 - Flagging: Allow users to flag potential mines to avoid clicking them.
 - Win/Loss State: Determine if the game is won (all non-mine cells revealed) or lost (a mine is clicked). Clearly indicate the result.

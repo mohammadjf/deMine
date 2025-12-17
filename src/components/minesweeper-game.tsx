@@ -1,7 +1,8 @@
+
 "use client";
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Bomb, Flag, Smile, Frown, RotateCw, Settings, X } from 'lucide-react';
+import { Bomb, Flag, Smile, Frown, Laugh, Settings, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
@@ -29,6 +30,7 @@ import {
   placeMines,
   revealCells,
   revealAllMines,
+  flagAllMines,
 } from '@/lib/minesweeper';
 
 interface CellProps {
@@ -55,10 +57,13 @@ const Cell: React.FC<CellProps> = React.memo(({ data, gameState, onClick, onCont
   const revealedClickedMine = isRevealed && isMine && gameState === 'lost';
 
   const renderContent = () => {
-    if (gameState === 'lost' && isMine && !isFlagged) {
-      return <Bomb className="size-4/5" />;
+    // Correctly flagged mine on game over. Highlight it.
+    if ((gameState === 'won' || gameState === 'lost') && isMine && isFlagged) {
+      return <Flag className="size-4/5 text-chart-2" />;
     }
-    if (gameState === 'lost' && !isMine && isFlagged) {
+
+    // Incorrectly flagged cell on game over.
+    if ((gameState === 'won' || gameState === 'lost') && !isMine && isFlagged) {
       return (
         <div className="relative flex items-center justify-center">
             <Flag className="size-4/5 text-muted-foreground" />
@@ -66,15 +71,20 @@ const Cell: React.FC<CellProps> = React.memo(({ data, gameState, onClick, onCont
         </div>
       )
     }
+
+    // Normal flag during gameplay
     if (isFlagged) {
       return <Flag className="size-4/5 text-accent-foreground" />;
     }
+
+    // Revealed cells (including mines on loss)
     if (isRevealed) {
       if (isMine) return <Bomb className="size-4/5" />;
       if (adjacentMines > 0) {
         return <span className={cn("font-bold text-lg", numberColors[adjacentMines - 1])}>{adjacentMines}</span>;
       }
     }
+
     return null;
   };
 
@@ -153,7 +163,7 @@ export function MinesweeperGame() {
     const revealedCount = newGrid.flat().filter(cell => cell.isRevealed).length;
     if (revealedCount === rows * cols - mines) {
       setGameState('won');
-      setGrid(revealAllMines(newGrid));
+      setGrid(flagAllMines(newGrid));
     } else {
       setGrid(newGrid);
     }
@@ -174,7 +184,7 @@ export function MinesweeperGame() {
 
   const SmileyIcon = useMemo(() => {
     if (gameState === 'lost') return Frown;
-    if (gameState === 'won') return <RotateCw className="text-green-400" />;
+    if (gameState === 'won') return Laugh;
     return Smile;
   }, [gameState]);
 
