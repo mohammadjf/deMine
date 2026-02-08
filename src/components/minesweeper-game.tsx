@@ -116,6 +116,7 @@ export function MinesweeperGame() {
   const [grid, setGrid] = useState<CellData[][]>([]);
   const [gameState, setGameState] = useState<GameState>('ready');
   const [timer, setTimer] = useState(0);
+  const difficultyStorageKey = 'demine:difficulty';
 
   const { rows, cols, mines } = useMemo(() => DIFFICULTY_SETTINGS[difficulty], [difficulty]);
 
@@ -126,6 +127,17 @@ export function MinesweeperGame() {
     setGrid(createGrid(rows, cols));
     setTimer(0);
   }, [rows, cols]);
+
+  useEffect(() => {
+    const storedDifficulty = localStorage.getItem(difficultyStorageKey);
+    if (storedDifficulty === 'beginner' || storedDifficulty === 'intermediate' || storedDifficulty === 'expert') {
+      setDifficulty(storedDifficulty);
+    }
+  }, [difficultyStorageKey]);
+
+  useEffect(() => {
+    localStorage.setItem(difficultyStorageKey, difficulty);
+  }, [difficulty, difficultyStorageKey]);
 
   useEffect(resetGame, [resetGame]);
   
